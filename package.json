@@ -1,6 +1,6 @@
 {
   "name": "its-not-commando",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A simple discord.js command framework",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -18,7 +18,7 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/MrSiliconGuy/its-not-commando.git"
   },
   "files": [
     "dist/",

@@ -18,7 +18,7 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/MrSiliconGuy/its-not-commando.git"
   },
   "files": [
     "dist/",

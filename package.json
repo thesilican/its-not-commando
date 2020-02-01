@@ -1,0 +1,31 @@
+{
+  "name": "its-not-commando",
+  "version": "0.1.0",
+  "description": "A simple discord.js command framework",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "node dist/test.js",
+    "build": "npx typescript"
+  },
+  "keywords": [
+    "discord",
+    "bot",
+    "commands",
+    "commando"
+  ],
+  "author": "MrSiliconGuy",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "files": [
+    "dist/",
+    "!dist/test"
+  ],
+  "dependencies": {
+    "@types/node": "^13.7.0",
+    "discord.js": "^11.5.1"
+  }
+}

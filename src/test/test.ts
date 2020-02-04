@@ -122,7 +122,14 @@ class ChannelCommand extends Command {
 const client = new Client({
     owner: "294169610679484417",
     prefix: "p.",
-    token: auth.token
+    token: auth.token,
+    validator: (message, client) => {
+        if (message.mentions.users.get(client.user.id) !== undefined) {
+            message.channel.send("Please don't ping me in a command -_-")
+            return false;
+        }
+        return true;
+    }
 });
 
 client.registry.registerDefaults(client)

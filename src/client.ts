@@ -6,12 +6,16 @@ export type ClientOptions = {
     token: string;
     owner: string;
     prefix: string;
+    validator?: MessageValidator
 };
+
+export type MessageValidator = (mesage: Discord.Message, client: Client) => boolean;
 
 export class Client extends Discord.Client {
     public readonly owner: string;
     public readonly prefix: string;
     public readonly registry: ClientRegistry;
+    public readonly validator?: MessageValidator;
 
     constructor(options: ClientOptions) {
         super();
@@ -19,6 +23,7 @@ export class Client extends Discord.Client {
         this.owner = options.owner;
         this.prefix = options.prefix;
         this.token = options.token;
+        this.validator = options.validator;
 
         this.registry = new ClientRegistry();
 
@@ -58,6 +63,13 @@ export class Client extends Discord.Client {
         // Parse message text
         if (!message.content.startsWith(this.prefix)) {
             return;
+        }
+
+        // Custom validation
+        if (this.validator !== undefined) {
+            if (this.validator(message, this) === false) {
+                return;
+            }
         }
 
         let messageText = message.content.slice(this.prefix.length);

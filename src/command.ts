@@ -72,12 +72,12 @@ export class Command {
 			if (result === null) {
 				let messageText = "The correct usage is `" + client.prefix + this.usageString() + "`";
 				if (this.examples.length > 0) {
-					messageText += "\nExamples: ";
+					messageText += "\nExamples:\n";
 					messageText += this.examples
-						.map(s => "`" + client.prefix + " " + s[0] + "` - " + s[1])
+						.map(s => "\t`" + client.prefix + s[0] + "` - " + s[1])
 						.join("\n");
 				}
-				messageText += "\n(Use `" + client.prefix + "help " + this.getFullName() + " for more details)";
+				messageText += "\n(Use `" + client.prefix + "help " + this.getFullName() + "` for more details)";
 				message.channel.send(messageText);
 				return;
 			}

@@ -89,7 +89,10 @@ class UserCommand extends Command {
             usage: [{
                 name: "user",
                 validator: Validator.User(client)
-            }]
+            }],
+            examples: [
+                ["user @Kevin", "Ping @Kevin"]
+            ]
         });
     }
 

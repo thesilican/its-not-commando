@@ -64,10 +64,10 @@ export class HelpCommand extends Command {
 				messageText += "\n\n**Usage:**: `" + client.prefix + command.usageString() + "`";
 				if (command.examples.length > 0) {
 					messageText += "\n\n**Examples:**\n" +
-						command.examples.map(e => "`" + client.prefix + e[0] + "` - " + e[1]).join(", ");
+						command.examples.map(e => "\t`" + client.prefix + e[0] + "` - " + e[1]).join("\n");
 				}
 			} else if (group !== null) {
-				messageText += "`" + group.displayName + "` commands:";
+				messageText += group.displayName + " commands:";
 				messageText += "    " + group.description;
 			}
 			else {

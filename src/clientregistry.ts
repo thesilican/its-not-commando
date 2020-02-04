@@ -69,6 +69,7 @@ export class ClientRegistry {
         for (const option of options) {
             this.registerGroup(option)
         }
+        return this;
     }
 
     public registerDefaults(client: Client) {

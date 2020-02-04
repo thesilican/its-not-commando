@@ -58,7 +58,7 @@ export const Validator = {
             if (isNaN(num)) {
                 return false;
             }
-            return num <= min && num >= max;
+            return num >= min && num <= max;
         }
     },
     Float: function (value: string): boolean {
@@ -71,7 +71,7 @@ export const Validator = {
             if (isNaN(num)) {
                 return false;
             }
-            return num <= min && num >= max;
+            return num >= min && num <= max;
         }
     },
     OneOf: function (constants: string[]): ArgumentValidator {

@@ -54,7 +54,7 @@ export class HelpCommand extends Command {
 			let group = client.registry.getGroup(args[0]);
 			if (command !== null) {
 				messageText += "`" + client.prefix + command.name + "`:";
-				messageText += " " + command.description;
+				messageText += " " + command.details;
 				if (command.aliases.length > 0) {
 					messageText +=
 						"\n\n**Aliases**: " +

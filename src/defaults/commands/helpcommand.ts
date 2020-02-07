@@ -19,6 +19,7 @@ export class HelpCommand extends Command {
 				["help", "List out all the help commands"],
 				["help ping", "Get specific help text for the `ping` command"]
 			],
+			dmAllowed: true
 		});
 	}
 
@@ -34,7 +35,7 @@ export class HelpCommand extends Command {
 				for (const command of client.registry.commands) {
 					// Check name & ensure proper permissions
 					if (command.group === group.name &&
-						(!command.ownerOnly || client.owner === msg.member.id)) {
+						(!command.ownerOnly || client.owner === msg.author.id)) {
 						if (!groupFound) {
 							messageText += "__" + group.displayName + "__\n";
 							groupFound = true;
@@ -75,6 +76,23 @@ export class HelpCommand extends Command {
 			}
 		}
 
-		msg.channel.send(messageText);
+
+		let dmChannel = msg.author.dmChannel;
+		if (dmChannel === null) {
+			try {
+				await msg.author.createDM();
+				msg.author.dmChannel.send(messageText);
+				if (msg.channel.type !== "dm") {
+					msg.channel.send("📥 | Sent you a DM with information");
+				}
+			} catch (error) {
+				msg.channel.send("Unable to send you help DMs. You probably have DMs disabled");
+			}
+		} else {
+			msg.author.dmChannel.send(messageText);
+			if (msg.channel.type !== "dm") {
+				msg.channel.send("📥 | Sent you a DM with information");
+			}
+		}
 	}
 }

@@ -55,11 +55,6 @@ export class Client extends Discord.Client {
             return;
         }
 
-        // Ignore DMs
-        if (message.channel instanceof Discord.DMChannel) {
-            return;
-        }
-
         // Parse message text
         if (!message.content.startsWith(this.prefix)) {
             return;

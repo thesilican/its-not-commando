@@ -9,7 +9,8 @@ export class ShutdownCommand extends Command {
 			description: "Shutdown the bot",
 			group: "util",
 			ownerOnly: true,
-			details: "Gracefully shuts down the bot. This will make the bot offline!",	
+			details: "Gracefully shuts down the bot. This will make the bot offline!",
+			dmAllowed: true
 		});
 	}
 

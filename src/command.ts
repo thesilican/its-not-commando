@@ -14,6 +14,7 @@ export type CommandOptions = {
 	examples?: [string, string][];
 	ownerOnly?: boolean;
 	hidden?: boolean;
+	dmAllowed?: boolean;
 };
 
 export class Command {
@@ -27,6 +28,7 @@ export class Command {
 	public readonly examples: [string, string][];
 	public readonly ownerOnly: boolean;
 	public readonly hidden: boolean;
+	public readonly dmAllowed: boolean;
 	public parent?: Command;
 
 	protected constructor(client: Client, options: CommandOptions) {
@@ -44,6 +46,7 @@ export class Command {
 		this.details = options.details ?? options.description;
 		this.examples = options.examples ?? [];
 		this.ownerOnly = options.ownerOnly ?? false;
+		this.dmAllowed = options.dmAllowed ?? false;
 		this.hidden = options.ownerOnly ?? false;
 	}
 
@@ -51,6 +54,10 @@ export class Command {
 		// Initial checks
 		if (this.ownerOnly && message.member.id !== client.owner) {
 			message.channel.send("This command can only be used by the owner");
+			return;
+		}
+		if (!this.dmAllowed && message.channel.type === "dm") {
+			message.channel.send("This command cannot be used in DMs");
 			return;
 		}
 

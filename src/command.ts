@@ -52,12 +52,12 @@ export class Command {
 
 	public execute(commandText: string, message: Discord.Message, client: Client): void {
 		// Initial checks
-		if (this.ownerOnly && message.member.id !== client.owner) {
-			message.channel.send("This command can only be used by the owner");
-			return;
-		}
 		if (!this.dmAllowed && message.channel.type === "dm") {
 			message.channel.send("This command cannot be used in DMs");
+			return;
+		}
+		if (this.ownerOnly && message.author.id !== client.owner) {
+			message.channel.send("This command can only be used by the owner");
 			return;
 		}
 

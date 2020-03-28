@@ -27,7 +27,9 @@
     "!dist/test"
   ],
   "dependencies": {
-    "@types/node": "^13.7.0",
     "discord.js": "^11.5.1"
+  },
+  "devDependencies": {
+    "@types/node": "^13.9.5"
   }
 }

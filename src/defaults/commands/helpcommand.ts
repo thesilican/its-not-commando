@@ -1,29 +1,27 @@
 import { Command } from "../../command";
 import { Client } from "../../client";
-import Discord from "discord.js";
-import { Validator } from "../../argument";
+import { CommandMessage } from "../../commandmessage";
 
 export class HelpCommand extends Command {
-	constructor(client: Client) {
-		super(client, {
+	constructor() {
+		super({
 			name: "help",
-			// aliases: ["wtf"], // lol
+			group: "util",
+			description: "List all the available commands, or get help for a particular command",
 			usage: [{
 				name: "command",
 				multi: true,
 				optional: true
 			}],
-			description: "List all the available commands, or get help for a particular command",
-			group: "util",
 			examples: [
 				["help", "List out all the help commands"],
-				["help ping", "Get specific help text for the `ping` command"]
+				["help ping", "Get help for the `ping` command"]
 			],
 			dmAllowed: true
 		});
 	}
 
-	public async run(msg: Discord.Message, args: string[], client: Client): Promise<void> {
+	public async run(msg: CommandMessage, args: string[], client: Client): Promise<void> {
 		let messageText = "";
 		if (args[0] === undefined) {
 			// General help
@@ -35,13 +33,13 @@ export class HelpCommand extends Command {
 				for (const command of client.registry.commands) {
 					// Check name & ensure proper permissions
 					if (command.group === group.name &&
-						(!command.ownerOnly || client.owner === msg.author.id)) {
+						(!command.ownerOnly || client.owner === msg.author.id) && !command.hidden) {
 						if (!groupFound) {
 							messageText += "__" + group.displayName + "__\n";
 							groupFound = true;
 						}
 						messageText += "  `" + client.prefix + command.name + "`";
-						messageText += " - " + command.description;
+						messageText += " - " + command.helpInfo.description;
 						if (command.ownerOnly) {
 							messageText += " (!)";
 						}
@@ -54,28 +52,44 @@ export class HelpCommand extends Command {
 			let command = client.registry.getCommand(args[0]);
 			let group = client.registry.getGroup(args[0]);
 			if (command !== null) {
-				messageText += "`" + client.prefix + command.name + "`:";
-				messageText += " " + command.details;
-				if (command.aliases.length > 0) {
-					messageText +=
-						"\n\n**Aliases**: " +
-						command.aliases.map(a => "`" + client.prefix + a + "`").join(", ");
+				messageText += "`" + client.prefix + command.fullName() + "`:";
+				// Description / Details
+				if (command.helpInfo.details === "") {
+					messageText += " " + command.helpInfo.description;
+				} else {
+					messageText += " " + command.helpInfo.details;
 				}
-				// TODO: Change usages[0] to something that actually prints all usages
-				messageText += "\n\n**Usage:**: `" + client.prefix + command.usageString() + "`";
-				if (command.examples.length > 0) {
+				// Aliases
+				if (command.aliases.length > 0) {
+					messageText += "\n\n**Aliases**: ";
+					messageText += command.aliases.map(a => "`" + client.prefix + a + "`").join(", ");
+					messageText += "";
+				}
+				// Usage
+				if (command.subcommands) {
+					messageText += "\n\n**Usage:**: `" + client.prefix + command.fullName() + " ";
+					messageText += "<" + command.subcommands.map(s => s.name).join("/") + ">`"
+				} else {
+					messageText += "\n\n**Usage:**: `" + client.prefix + command.fullName() + " " + command.usage.toString() + "`";
+				}
+				// Examples
+				if (command.helpInfo.examples.length > 0) {
 					messageText += "\n\n**Examples:**\n" +
-						command.examples.map(e => "\t`" + client.prefix + e[0] + "` - " + e[1]).join("\n");
+						command.helpInfo.examples.map(e => "\t`" + client.prefix + e[0] + "` - " + e[1]).join("\n");
 				}
 			} else if (group !== null) {
-				messageText += group.displayName + " commands:";
-				messageText += "    " + group.description;
+				messageText += "__" + group.displayName + " commands__";
+				messageText += "\n\t" + group.description;
+				messageText += "\n\nCommands: ";
+				messageText += client.registry.commands
+					.filter(c => c.group === group?.name)
+					.map(c => "`" + client.prefix + c.name + "`")
+					.join(",");
 			}
 			else {
 				messageText += "Could not find command or command group `" + args[0] + "`";
 			}
 		}
-
 
 		let dmChannel = msg.author.dmChannel;
 		if (dmChannel === null) {
@@ -83,15 +97,15 @@ export class HelpCommand extends Command {
 				await msg.author.createDM();
 				msg.author.dmChannel.send(messageText);
 				if (msg.channel.type !== "dm") {
-					msg.channel.send("📥 | Sent you a DM with information");
+					msg.say("📥 | Sent you a DM with information");
 				}
 			} catch (error) {
-				msg.channel.send("Unable to send you help DMs. You probably have DMs disabled");
+				msg.say("Unable to send you help DMs. You probably have DMs disabled");
 			}
 		} else {
 			msg.author.dmChannel.send(messageText);
 			if (msg.channel.type !== "dm") {
-				msg.channel.send("📥 | Sent you a DM with information");
+				msg.say("📥 | Sent you a DM with information");
 			}
 		}
 	}

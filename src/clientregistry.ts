@@ -3,7 +3,10 @@ import { CommandGroup, CommandGroupOptions } from "./commandgroup";
 import { PingCommand } from "./defaults/commands/pingcommand";
 import { HelpCommand } from "./defaults/commands/helpcommand";
 import { ShutdownCommand } from "./defaults/commands/shutdowncommand";
-import { Client } from "./client";
+import { CommandBase } from "./commandbase";
+import { SubCommand } from "./subcommand";
+
+type CommandClass = { new(): Command };
 
 export class ClientRegistry {
     public readonly commands: Command[];
@@ -20,10 +23,20 @@ export class ClientRegistry {
         });
     }
 
-    public getCommand(name: string): Command | null {
-        for (const command of this.commands) {
-            if (name === command.name || command.aliases.includes(name)) {
-                return command;
+    public getCommand(name: string): Command | SubCommand | null {
+        let splits = name.split(" ");
+        return this._getCommandRecursive(splits, this.commands);
+    }
+    private _getCommandRecursive(splits: string[], commands: (Command | SubCommand)[]): Command | SubCommand | null {
+        let commandName = splits[0];
+        let subcommandNames = splits.slice(1);
+        for (const command of commands) {
+            if (commandName === command.name || command.aliases.includes(commandName)) {
+                if (subcommandNames.length > 0) {
+                    return this._getCommandRecursive(subcommandNames, command.subcommands ?? []);
+                } else {
+                    return command;
+                }
             }
         }
         return null;
@@ -38,7 +51,8 @@ export class ClientRegistry {
         return null;
     }
 
-    public registerCommand(command: Command) {
+    public registerCommand(commandClass: CommandClass) {
+        let command = new commandClass();
         for (const c of this.commands) {
             if (c.name === command.name) {
                 throw "Command with name '" + command.name + "' already exists";
@@ -72,9 +86,9 @@ export class ClientRegistry {
         return this;
     }
 
-    public registerDefaults(client: Client) {
+    public registerDefaults() {
         this.registerDefaultGroups();
-        this.registerDefaultCommands(client);
+        this.registerDefaultCommands();
         return this;
     }
 
@@ -86,10 +100,10 @@ export class ClientRegistry {
         return this;
     }
 
-    public registerDefaultCommands(client: Client) {
-        this.registerCommand(new PingCommand(client));
-        this.registerCommand(new HelpCommand(client));
-        this.registerCommand(new ShutdownCommand(client));
+    public registerDefaultCommands() {
+        this.registerCommand(PingCommand);
+        this.registerCommand(HelpCommand);
+        this.registerCommand(ShutdownCommand);
         return this;
     }
 }

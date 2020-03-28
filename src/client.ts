@@ -1,52 +1,71 @@
-import { ClientRegistry } from "./clientregistry";
-import Discord from "discord.js";
-import { Command } from "./command";
+import Discord from 'discord.js';
+import { ClientRegistry } from './clientregistry';
+import { CommandMessage } from './commandmessage';
+
+interface ClientLogger {
+    log(...message: any[]): void;
+    error(...message: any[]): void;
+}
+
+type MessageValidator = (mesage: Discord.Message, client: Client) => boolean;
 
 export type ClientOptions = {
-    token: string;
     owner: string;
     prefix: string;
-    validator?: MessageValidator
+    token: string;
+    validator?: MessageValidator;
+    logger?: ClientLogger;
+    registerDefaultCommands?: boolean
 };
-
-export type MessageValidator = (mesage: Discord.Message, client: Client) => boolean;
 
 export class Client extends Discord.Client {
     public readonly owner: string;
     public readonly prefix: string;
     public readonly registry: ClientRegistry;
     public readonly validator?: MessageValidator;
+    public readonly logger: ClientLogger;
 
     constructor(options: ClientOptions) {
         super();
 
         this.owner = options.owner;
-        this.prefix = options.prefix;
         this.token = options.token;
+        this.prefix = options.prefix;
         this.validator = options.validator;
+        this.logger = options.logger ?? console;
 
         this.registry = new ClientRegistry();
+        if (options.registerDefaultCommands ?? true) {
+            this.registry.registerDefaults();
+        }
 
         this.on("ready", this.onReady);
         this.on("message", this.onMessage);
         this.on("error", this.onError);
+
     }
 
-    public start() {
-        this.login(this.token).then(_ => {
-            this.user.setActivity("Use " + this.prefix + "help");
-        });
+    public async start() {
+        await this.login();
+        this.user.setActivity("Use " + this.prefix + "help");
+
+        // Throw an error if the user doesn't exist
+        try {
+            await this.fetchUser(this.owner);
+        } catch {
+            this.logger.error("Owner with Discord user id of '" + this.owner + "' is invalid.");
+            this.stop();
+        }
     }
 
-    public stop() {
-        console.log("Shutting down bot...");
-        this.destroy().then(_ => {
-            setTimeout(process.exit, 1000, 0);
-        });
+    public async stop() {
+        this.logger.log("Shutting down bot...");
+        await this.destroy();
+        setTimeout(process.exit, 1000, 0);
     }
 
     private onReady() {
-        console.log("Logged in as " + this.user.tag);
+        this.logger.log("Logged in as " + this.user.tag);
     }
 
     private onMessage(message: Discord.Message) {
@@ -68,20 +87,22 @@ export class Client extends Discord.Client {
         }
 
         let messageText = message.content.slice(this.prefix.length);
-        let pivot = messageText.indexOf(" ");
-        let commandText = pivot === -1 ? messageText : messageText.slice(0, pivot);
+        if (messageText === "") {
+            return;
+        }
+        let commandText = messageText.split(" ")[0];
 
         let command = this.registry.getCommand(commandText);
         if (!command) {
             message.channel.send("Command not found: `" + commandText + "`");
             return;
         }
-        command.execute(messageText, message, this);
+        command.execute(messageText, CommandMessage.create(message), this);
     }
 
     private onError(error: Error) {
         let errorMessage = "Unhandled Exception " + error.name + ": " + error.message + "\n" + error.stack;
-        this.users.get(this.owner)?.sendMessage(errorMessage);
-        console.error(errorMessage);
+        this.users.get(this.owner)!.sendMessage(errorMessage);
+        this.logger.error(errorMessage);
     }
 }

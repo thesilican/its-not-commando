@@ -1,6 +1,10 @@
-export { Argument, ArgumentOptions, ArgumentValidator, Validator } from "./argument";
+export { Argument, ArgumentOptions } from "./argument";
 export { Client, ClientOptions } from "./client";
 export { ClientRegistry } from "./clientregistry";
 export { Command, CommandOptions } from "./command";
 export { CommandGroup, CommandGroupOptions } from "./commandgroup";
+export { CommandMessage } from "./commandmessage";
+export { ReactionMenu, ReactionMenuOptions } from "./reactionmenu";
+export { SubCommand, SubCommandOptions } from "./subcommand";
 export { Usage, UsageOptions } from "./usage";
+export { Validator } from "./validators";

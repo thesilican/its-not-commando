@@ -10,11 +10,11 @@ export class PingCommand extends Command {
 		"Hwwapinggg!",
 	];
 
-	constructor(client: Client) {
-		super(client, {
+	constructor() {
+		super({
 			name: "ping",
-			description: "Check if the bot is alive",
 			group: "util",
+			description: "Check if the bot is alive",
 			details: "Ping the bot to check if he is still alive",
 			dmAllowed: true
 		});

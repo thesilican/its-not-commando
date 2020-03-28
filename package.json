@@ -6,6 +6,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "node dist/test.js",
+    "lint": "npx eslint",
     "build": "npx typescript",
     "prepublish": "npm run build"
   },

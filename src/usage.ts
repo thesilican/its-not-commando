@@ -1,14 +1,12 @@
-import { Argument } from "./argument";
+import { Argument, ArgumentOptions } from "./argument";
 
-export type UsageOptions = {
-    args: Argument[]
-}
+export type UsageOptions = ArgumentOptions[];
 
 export class Usage {
     public readonly args: Argument[]
 
     public constructor(options: UsageOptions) {
-        this.args = options.args;
+        this.args = options.map(o => new Argument(o));
         this.validate();
     }
 
@@ -79,7 +77,7 @@ export class Usage {
             if (val === null) {
                 return null;
             }
-            results.push(argStr);
+            results.push(val);
             if (arg.multi) {
                 break;
             }

@@ -3,8 +3,11 @@ import { MessageReaction, User, DMChannel } from "discord.js";
 
 export type ReactionMenuCallback = (reaction: MessageReaction, message: CommandMessage) => Promise<void>;
 
+export type ReactionMenuTimeout = (message: CommandMessage) => Promise<void>;
+
 export type ReactionMenuOptions = {
-    seconds?: number
+    seconds?: number;
+    onTimeout?: ReactionMenuTimeout;
 }
 
 export class ReactionMenu {
@@ -12,12 +15,14 @@ export class ReactionMenu {
     timespan: number
     emojis: string[];
     onReaction: ReactionMenuCallback;
+    onTimeout?: ReactionMenuTimeout;
 
     constructor(message: CommandMessage, emojis: string[], onReaction: ReactionMenuCallback, options: ReactionMenuOptions | undefined) {
         this.message = message;
         this.emojis = emojis;
         this.onReaction = onReaction;
         this.timespan = (options?.seconds ?? 60) * 1000;
+        this.onTimeout = options?.onTimeout;
 
         // Verification
         if (this.message.channel instanceof DMChannel) {
@@ -41,6 +46,9 @@ export class ReactionMenu {
                 await reaction.remove(user);
                 await this.onReaction(reaction, this.message);
             } catch (error) {
+                if (this.onTimeout) {
+                    this.onTimeout(this.message);
+                }
                 console.log(error);
                 loop = false;
             }

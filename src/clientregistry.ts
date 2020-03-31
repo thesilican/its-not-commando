@@ -68,6 +68,12 @@ export class ClientRegistry {
         return this;
     }
 
+    public registerCommands(commands: CommandClass[]) {
+        for (const command of commands) {
+            this.registerCommand(command);
+        }
+    }
+
     public registerGroup(options: CommandGroupOptions) {
         let group = new CommandGroup(options);
         for (const g of this.groups) {

@@ -1,12 +1,11 @@
 {
   "name": "its-not-commando",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "A simple discord.js command framework",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "node dist/test.js",
-    "lint": "npx eslint",
     "build": "npx typescript",
     "prepublish": "npm run build"
   },

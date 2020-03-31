@@ -10,7 +10,7 @@ export default class TestCommand extends Command {
             aliases: ["t"],
             group: "util",
             description: "Testing out commando",
-            subcommands: [PrefixSubCommand, ValidatorSubCommand],
+            subcommands: [PrefixSubCommand, ValidatorSubCommand, PasswordCommand, TextMenuCommand, ReactionMenuCommand],
             dmAllowed: true
         });
     }
@@ -131,5 +131,75 @@ class NumberValidationCommand extends SubCommand {
 
     public async run(msg: CommandMessage, args: string[], client: Client) {
         msg.say((parseFloat(args[0]) / 9 * 3).toFixed(100));
+    }
+}
+
+class PasswordCommand extends SubCommand {
+    constructor() {
+        super({
+            name: "password",
+            description: "Give me the password right away"
+        });
+    }
+
+    public async run(msg: CommandMessage) {
+        let text = await msg.promptText("Tell the the password right away", undefined, { seconds: 10 });
+        if (text === null) {
+            msg.say("Prompt timed out");
+        } else {
+            if (text === "incorrect") {
+                msg.say("Correct!");
+            } else {
+                msg.say("The password is incorrect")
+            }
+        }
+    }
+}
+
+class TextMenuCommand extends SubCommand {
+    constructor() {
+        super({
+            name: "shop",
+            description: "Testing the text menu"
+        });
+    }
+
+    public async run(msg: CommandMessage) {
+        let shop = [{
+            category: "food",
+            items: ["cherry", "pineapple", "grape"]
+        }, {
+            category: "items",
+            items: ["sword", "shield", "axe"]
+        }];
+        let pageNum = 0;
+        const getPage = () => {
+            let page = shop[pageNum];
+            return `${page.category}\n${page.items.join(", ")}`;
+        }
+
+        (await msg.say(getPage())).createMenu(['👈', '👉'], async (reaction, msg) => {
+            if (reaction.emoji.name === "👈") {
+                pageNum = Math.max(pageNum - 1, 0);
+            } else if (reaction.emoji.name === "👉") {
+                pageNum = Math.min(pageNum + 1, 1);
+            }
+            msg.edit(getPage());
+        });
+    }
+}
+
+class ReactionMenuCommand extends SubCommand {
+    constructor() {
+        super({
+            name: "reaction-menu",
+            description: "Test the reaction menu"
+        });
+    }
+
+    public async run(msg: CommandMessage) {
+        (await msg.say("Options?")).createMenu(['👍', '👎'], async () => {
+
+        }, { seconds: 10 });
     }
 }

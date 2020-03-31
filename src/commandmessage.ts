@@ -3,9 +3,13 @@ import { ReactionMenu, ReactionMenuCallback, ReactionMenuOptions } from "./react
 
 export class CommandMessage extends Message {
     static create(message: Message): CommandMessage {
-        let commandMessage = Object.create(CommandMessage.prototype);
-        Object.assign(commandMessage, message);
-        return commandMessage;
+        // Sketchy
+        let proto = Object.getPrototypeOf(message);
+        proto.say = CommandMessage.prototype.say;
+        proto.prompt = CommandMessage.prototype.prompt;
+        proto.promptText = CommandMessage.prototype.promptText;
+        proto.createMenu = CommandMessage.prototype.createMenu;
+        return message as CommandMessage;
     }
 
     async say(content: string, options?: MessageOptions | RichEmbed | Attachment): Promise<CommandMessage> {
@@ -19,8 +23,7 @@ export class CommandMessage extends Message {
         return res;
     }
 
-    async prompt(content: string, filter?: (msg: CommandMessage) => boolean, options?: { seconds?: number }): Promise<string | null> {
-        this.say(content);
+    async prompt(filter?: (msg: CommandMessage) => boolean, options?: { seconds?: number }): Promise<CommandMessage | null> {
         const textFilter = (response: Message) => {
             if (response.author.id !== this.author.id) {
                 return false;
@@ -40,10 +43,19 @@ export class CommandMessage extends Message {
             if (!messages.first()) {
                 return null;
             } else {
-                return messages.first().content;
+                return CommandMessage.create(messages.first());
             }
         } catch (error) {
             return null;
+        }
+    }
+
+    async promptText(content: string, filter?: (msg: CommandMessage) => boolean, options?: { seconds?: number }): Promise<string | null> {
+        let res = await (await this.say(content)).prompt(filter, options);
+        if (res === null) {
+            return null;
+        } else {
+            return res.content;
         }
     }
 

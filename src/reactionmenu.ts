@@ -8,6 +8,7 @@ export type ReactionMenuTimeout = (message: CommandMessage) => Promise<void>;
 export type ReactionMenuOptions = {
     seconds?: number;
     onTimeout?: ReactionMenuTimeout;
+    onExit?: ReactionMenuTimeout;
 }
 
 export class ReactionMenu {
@@ -16,6 +17,7 @@ export class ReactionMenu {
     emojis: string[];
     onReaction: ReactionMenuCallback;
     onTimeout?: ReactionMenuTimeout;
+    onExit?: ReactionMenuTimeout
 
     constructor(message: CommandMessage, emojis: string[], onReaction: ReactionMenuCallback, options: ReactionMenuOptions | undefined) {
         this.message = message;
@@ -23,6 +25,7 @@ export class ReactionMenu {
         this.onReaction = onReaction;
         this.timespan = (options?.seconds ?? 60) * 1000;
         this.onTimeout = options?.onTimeout;
+        this.onExit = options?.onExit;
 
         // Verification
         if (this.message.channel instanceof DMChannel) {
@@ -46,12 +49,14 @@ export class ReactionMenu {
                 await reaction.remove(user);
                 loop = await this.onReaction(reaction, this.message);
             } catch (error) {
-                console.log(error);
+                if (this.onTimeout) {
+                    this.onTimeout(this.message);
+                }
                 loop = false;
             }
         }
-        if (this.onTimeout) {
-            this.onTimeout(this.message);
+        if (this.onExit) {
+            this.onExit(this.message);
         }
     }
 }

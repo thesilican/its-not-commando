@@ -23,9 +23,9 @@ export class CommandMessage extends Message {
         return res;
     }
 
-    async prompt(filter?: (msg: CommandMessage) => boolean, options?: { seconds?: number }): Promise<CommandMessage | null> {
+    async prompt(userID: string, filter?: (msg: CommandMessage) => boolean, options?: { seconds?: number }): Promise<CommandMessage | null> {
         const textFilter = (response: Message) => {
-            if (response.author.id !== this.author.id) {
+            if (response.author.id !== userID) {
                 return false;
             }
             if (filter) {
@@ -51,7 +51,7 @@ export class CommandMessage extends Message {
     }
 
     async promptText(content: string, filter?: (msg: CommandMessage) => boolean, options?: { seconds?: number }): Promise<string | null> {
-        let res = await (await this.say(content)).prompt(filter, options);
+        let res = await (await this.say(content)).prompt(this.author.id, filter, options);
         if (res === null) {
             return null;
         } else {

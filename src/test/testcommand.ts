@@ -185,6 +185,7 @@ class TextMenuCommand extends SubCommand {
                 pageNum = Math.min(pageNum + 1, 1);
             }
             msg.edit(getPage());
+            return true;
         });
     }
 }
@@ -199,7 +200,8 @@ class ReactionMenuCommand extends SubCommand {
 
     public async run(msg: CommandMessage) {
         (await msg.say("Options?")).createMenu(['👍', '👎'], async () => {
-
+            console.log("Reaction");
+            return true;
         }, { seconds: 10 });
     }
 }

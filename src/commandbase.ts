@@ -53,7 +53,7 @@ export abstract class CommandBase {
                 }
             }
             let messageText = "The correct usage is `" + client.prefix + this.fullName() + " ";
-            messageText += "<" + this.subcommands.map(s => s.name).join("/") + ">`\n";
+            messageText += "(" + this.subcommands.map(s => s.name).join("/") + ")`\n";
             messageText += "\n(Use `" + client.prefix + "help " + this.fullName() + "` for more details)";
             msg.say(messageText);
             return false;

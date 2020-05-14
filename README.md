@@ -46,4 +46,4 @@ This will initiate a bot client with the token that you include.
 You can change the prefix and the [ownerID](https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-).
 
 ## Documentation
-Maybe later, [you can help with documentation! (typescript kowledge required)](https://github.com/MrSiliconGuy/its-not-commando/tree/master/src)
+Maybe later, [you can help with documentation! (typescript knowledge required)](https://github.com/MrSiliconGuy/its-not-commando/tree/master/src)

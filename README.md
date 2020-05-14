@@ -35,7 +35,7 @@ To initiate a client, use this.
 const its-not-commando = require("its-not-commando");
 
 const client = new its-not-commando.Client({
-  ownerID : "your-user-id",
+  ownerID : "your-user-id-here",
   prefix: ";",
 });
 
@@ -46,3 +46,4 @@ This will initiate a bot client with the token that you include.
 You can change the prefix and the [ownerID](https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-).
 
 ## Documentation
+Maybe later, [you can help with documentation! (typescript kowledge required)](https://github.com/MrSiliconGuy/its-not-commando/tree/master/src)

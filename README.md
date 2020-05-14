@@ -27,7 +27,7 @@ simple to use, yet has enough features to get what you want done
 **Node 8.6.0 or newer is required.**  
 `npm install its-not-commando`
 
-## Documentation
+## Basic Usage
 First, create a file called `app.js` (or whatever you prefer) which will be used for the base.
 
 To initiate a client, use this.
@@ -41,3 +41,8 @@ const client = new its-not-commando.Client({
 
 client.login("your-bot-token-here");
 ```
+
+This will initiate a bot client with the token that you include. 
+You can change the prefix and the [ownerID](https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-).
+
+## Documentation

@@ -70,7 +70,7 @@ export class HelpCommand extends Command {
 					messageText += "\n\n**Usage:**: `" + client.prefix + command.fullName() + " ";
 					messageText += "(" + command.subcommands.map(s => s.name).join("/") + ")`"
 				} else {
-					messageText += "\n\n**Usage:**: `" + client.prefix + command.fullName() + " " + command.usage.toString() + "`";
+					messageText += "\n\n**Usage:** `" + client.prefix + command.fullName() + " " + command.usage.toString() + "`";
 				}
 				// Examples
 				if (command.helpInfo.examples.length > 0) {

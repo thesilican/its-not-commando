@@ -15,7 +15,7 @@ export class PingCommand extends Command {
 			name: "ping",
 			group: "util",
 			description: "Check if the bot is alive",
-			details: "Ping the bot to check if he is still alive",
+			details: "Ping the bot to check if the bot is still alive",
 			dmAllowed: true
 		});
 	}

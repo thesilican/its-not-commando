@@ -28,4 +28,16 @@ simple to use, yet has enough features to get what you want done
 `npm install its-not-commando`
 
 ## Documentation
-Maybe later
+First, create a file called `app.js` (or whatever you prefer) which will be used for the base.
+
+To initiate a client, use this.
+```js
+const its-not-commando = require("its-not-commando");
+
+const client = new its-not-commando.Client({
+  ownerID : "your-user-id",
+  prefix: ";",
+});
+
+client.login("your-bot-token-here");
+```

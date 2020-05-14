@@ -61,16 +61,16 @@ export class HelpCommand extends Command {
 				}
 				// Aliases
 				if (command.aliases.length > 0) {
-					messageText += "\n\n**Aliases**: ";
+					messageText += "\n\n**Aliases:** ";
 					messageText += command.aliases.map(a => "`" + client.prefix + a + "`").join(", ");
 					messageText += "";
 				}
 				// Usage
 				if (command.subcommands) {
-					messageText += "\n\n**Usage:**: `" + client.prefix + command.fullName() + " ";
+					messageText += "\n\n**Usage:** `" + client.prefix + command.fullName() + " ";
 					messageText += "(" + command.subcommands.map(s => s.name).join("/") + ")`"
 				} else {
-					messageText += "\n\n**Usage:**: `" + client.prefix + command.fullName() + " " + command.usage.toString() + "`";
+					messageText += "\n\n**Usage:** `" + client.prefix + command.fullName() + " " + command.description + "`";
 				}
 				// Examples
 				if (command.helpInfo.examples.length > 0) {

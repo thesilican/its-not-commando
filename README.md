@@ -54,7 +54,7 @@ client.registry.registerGroup({
 client.registry.registerCommand(SayHelloCommand);
 client.registry.registerCommand(GitCommand);
 
-client.start();
+client.start(client.token);
 ```
 
 This will initiate a bot client with the token that you include.

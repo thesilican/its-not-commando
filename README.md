@@ -38,8 +38,8 @@ import { Client } from "its-not-commando";
 import { SayHelloCommand } from "./SayHellocommand";
 import { GitCommand } from "./GitCommand";
 
-const client = Client({
-  ownerID: "your-user-id-here",
+const client = new Client({
+  owner: "your-user-id-here",
   prefix: "+", // Or whatever else you want
   token: "your-bot-token-here",
 });

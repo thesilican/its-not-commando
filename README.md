@@ -34,23 +34,23 @@ To initiate a client, use the following code:
 
 ```ts
 import { Client } from "its-not-commando";
-// Import the commands you are using
+// Import the commands you are using.
 import { SayHelloCommand } from "./SayHellocommand";
 import { GitCommand } from "./GitCommand";
 
 const client = new Client({
   owner: "your-user-id-here",
-  prefix: "+", // Or whatever else you want
+  prefix: "+", // Or whatever else you want.
   token: "your-bot-token-here",
 });
 
-// Register any used command groups here
+// Register any used command groups here.
 client.registry.registerGroup({
   name: "fun",
   description: "Fun commands to try",
 });
 
-// Register any commands used here
+// Register any commands used here.
 client.registry.registerCommand(SayHelloCommand);
 client.registry.registerCommand(GitCommand);
 

@@ -1,8 +1,7 @@
-import { ArgumentOptions } from "./argument";
-import { UsageOptions, Usage } from "./usage";
-import { SubCommand, SubCommandOptions } from "./subcommand";
-import { CommandMessage } from "./commandmessage";
 import { Client } from "./client";
+import { CommandMessage } from "./commandmessage";
+import { SubCommand } from "./subcommand";
+import { Usage, UsageOptions } from "./usage";
 
 type SubCommandClass = { new (): SubCommand };
 
@@ -16,7 +15,7 @@ export type CommandBaseOptions = {
   name: string;
   description: string;
   aliases?: string[];
-  usage?: UsageOptions;
+  arguments?: UsageOptions;
   subcommands?: SubCommandClass[];
   details?: string;
   examples?: [string, string][];
@@ -24,14 +23,14 @@ export type CommandBaseOptions = {
 
 export abstract class CommandBase {
   public readonly name: string;
-  public readonly usage: Usage;
+  public readonly arguments: Usage;
   public readonly aliases: string[];
   public readonly subcommands?: SubCommand[];
   public readonly helpInfo: CommandHelpInfo;
 
   protected constructor(options: CommandBaseOptions) {
     this.name = options.name;
-    this.usage = new Usage(options.usage ?? []);
+    this.arguments = new Usage(options.arguments ?? []);
     this.subcommands =
       options.subcommands?.map((s) => new s().setParent(this)) ?? undefined;
     this.aliases = options.aliases ?? [];
@@ -74,7 +73,7 @@ export abstract class CommandBase {
       return false;
     } else {
       // Match usage
-      let result = this.usage.match(args);
+      let result = this.arguments.match(args);
       if (result !== null) {
         this.run(msg, result, client);
         return true;
@@ -84,7 +83,7 @@ export abstract class CommandBase {
           client.prefix +
           this.fullName() +
           " " +
-          this.usage.toString() +
+          this.arguments.toString() +
           "`\n\n";
         if (this.helpInfo.examples && this.helpInfo.examples.length > 0) {
           messageText += "Examples:\n";
@@ -110,7 +109,7 @@ export abstract class CommandBase {
     args: string[],
     client: Client
   ): Promise<void> {
-    throw "Command has not impemented a run method";
+    throw new Error("Command has not impemented a run method");
   }
 
   public abstract fullName(): string;

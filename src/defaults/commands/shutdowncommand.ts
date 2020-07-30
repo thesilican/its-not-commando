@@ -1,6 +1,5 @@
-import { Command } from "../../command";
 import { Client } from "../../client";
-import Discord from "discord.js";
+import { Command } from "../../command";
 import { CommandMessage } from "../../commandmessage";
 
 export class ShutdownCommand extends Command {

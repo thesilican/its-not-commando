@@ -1,30 +1,32 @@
 import {
   Message,
+  MessageAdditions,
   MessageOptions,
-  RichEmbed,
-  Attachment,
-  CollectorFilter,
+  DMChannel,
 } from "discord.js";
-import {
-  ReactionMenu,
-  ReactionMenuCallback,
-  ReactionMenuOptions,
-} from "./reactionmenu";
+import { ReactionMenu, ReactionMenuOptions } from "./reactionmenu";
+import { Command } from "./command";
+
+type PromptOptions = {
+  seconds?: number;
+  filter?: (msg: CommandMessage) => boolean;
+};
 
 export class CommandMessage extends Message {
   static create(message: Message): CommandMessage {
     // Sketchy
     let proto = Object.getPrototypeOf(message);
     proto.say = CommandMessage.prototype.say;
-    proto.prompt = CommandMessage.prototype.prompt;
-    proto.promptText = CommandMessage.prototype.promptText;
+    proto.createPrompt = CommandMessage.prototype.createPrompt;
     proto.createMenu = CommandMessage.prototype.createMenu;
+    proto.prompt = CommandMessage.prototype.prompt;
+    proto.promptReaction = CommandMessage.prototype.promptReaction;
     return message as CommandMessage;
   }
 
   async say(
     content: string,
-    options?: MessageOptions | RichEmbed | Attachment
+    options?: MessageOptions | MessageAdditions
   ): Promise<CommandMessage> {
     let messages = await this.channel.send(content, options);
     let res: CommandMessage | CommandMessage[];
@@ -36,47 +38,53 @@ export class CommandMessage extends Message {
     return res;
   }
 
-  async prompt(
-    userID: string,
-    filter?: (msg: CommandMessage) => boolean,
-    options?: { seconds?: number }
-  ): Promise<CommandMessage | null> {
+  async createPrompt(options?: PromptOptions): Promise<CommandMessage | null> {
     const textFilter = (response: Message) => {
-      if (response.author.id !== userID) {
+      // Cannot respond to your own prompt
+      if (response.author.id === this.author.id) {
         return false;
       }
-      if (filter) {
+      if (options?.filter) {
         let commandMessage = CommandMessage.create(response);
-        return filter(commandMessage);
+        return options.filter(commandMessage);
       } else {
         return true;
       }
     };
     try {
       let messages = await this.channel.awaitMessages(textFilter, {
-        maxMatches: 1,
+        max: 1,
         time: (options?.seconds ?? 60) * 1000,
       });
-      if (!messages.first()) {
+      const first = messages.first();
+      if (!first) {
         return null;
       } else {
-        return CommandMessage.create(messages.first());
+        return CommandMessage.create(first);
       }
     } catch (error) {
       return null;
     }
   }
 
-  async promptText(
+  createMenu(emojis: string[], options?: ReactionMenuOptions) {
+    let menu = new ReactionMenu(this, emojis, options);
+    return menu;
+  }
+
+  async prompt(
     content: string,
-    filter?: (msg: CommandMessage) => boolean,
-    options?: { seconds?: number }
+    options?: PromptOptions
   ): Promise<string | null> {
-    let res = await (await this.say(content)).prompt(
-      this.author.id,
-      filter,
-      options
-    );
+    const msg = await this.say(content);
+    let res = await msg.createPrompt({
+      ...options,
+      filter: (msg) => {
+        if (msg.author.id !== this.author.id) return false;
+        if (options?.filter) return options.filter(msg);
+        return true;
+      },
+    });
     if (res === null) {
       return null;
     } else {
@@ -84,13 +92,30 @@ export class CommandMessage extends Message {
     }
   }
 
-  createMenu(
-    emojis: string[],
-    onReaction: ReactionMenuCallback,
-    options?: ReactionMenuOptions
-  ) {
-    let menu = new ReactionMenu(this, emojis, onReaction, options);
-    menu.start();
-    return menu;
+  async promptReaction(
+    message: string,
+    reactions: string[],
+    options?: {
+      allowAnyone?: boolean;
+      seconds?: number;
+    }
+  ): Promise<string | null> {
+    const msg = await this.say(this.content);
+    return new Promise<string | null>((res, rej) => {
+      if (msg.channel instanceof DMChannel) {
+        rej("Cannot create menu in DM channel");
+      }
+      const menu = new ReactionMenu(msg, reactions, {
+        maxTotalReactions: 1,
+        filter: (r, u) => (options?.allowAnyone ? true : u.id === this.id),
+        seconds: options?.seconds,
+      });
+      menu.on("reaction", async (emoji) => {
+        res(emoji);
+      });
+      menu.on("finish", async () => {
+        res(null);
+      });
+    });
   }
 }

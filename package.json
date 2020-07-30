@@ -3,10 +3,11 @@
   "version": "0.5.0",
   "description": "A simple discord.js command framework",
   "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "typings": "typings/index.d.ts",
   "scripts": {
-    "test": "node dist/test/test.js",
-    "build": "npx typescript",
+    "test": "npm start",
+    "start": "ts-node-dev src/example/index.ts",
+    "build": "tsc",
     "prepare": "npm run build"
   },
   "keywords": [
@@ -16,20 +17,22 @@
     "commando"
   ],
   "author": "MrSiliconGuy",
-  "license": "ISC",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/MrSiliconGuy/its-not-commando.git"
   },
   "files": [
     "dist/",
-    "!dist/test"
+    "!dist/example"
   ],
   "dependencies": {
-    "discord.js": "^11.5.1"
+    "@types/node": "^14.0.27",
+    "@types/ws": "^7.2.6",
+    "discord.js": "^12.2.0"
   },
   "devDependencies": {
-    "@types/node": "^13.9.5",
-    "typescript": "^3.9.2"
+    "ts-node-dev": "^1.0.0-pre.56",
+    "typescript": "^3.9.7"
   }
 }

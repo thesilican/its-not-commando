@@ -19,10 +19,12 @@ export class Usage {
     for (let i = 0; i < this.args.length; i++) {
       const arg = this.args[i];
       if (encounterOptional && !arg.optional) {
-        throw "All optional arguments must come after mandatory ones";
+        throw new Error(
+          "All optional arguments must come after mandatory ones"
+        );
       }
       if (encounterMulti) {
-        throw "Multistrings must always be the last argument";
+        throw new Error("Multistrings must always be the last argument");
       }
 
       if (arg.optional) {

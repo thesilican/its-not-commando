@@ -1,4 +1,4 @@
-import { Validator, ArgumentValidator } from "./validators";
+import { ArgumentValidator, Validator } from "./validators";
 
 export type ArgumentOptions = {
   name: string;

@@ -1,5 +1,5 @@
-import { Command } from "../../command";
 import { Client } from "../../client";
+import { Command } from "../../command";
 import { CommandMessage } from "../../commandmessage";
 
 export class HelpCommand extends Command {
@@ -9,7 +9,7 @@ export class HelpCommand extends Command {
       group: "util",
       description:
         "List all the available commands, or get help for a particular command",
-      usage: [
+      arguments: [
         {
           name: "command",
           multi: true,
@@ -32,7 +32,7 @@ export class HelpCommand extends Command {
     let messageText = "";
     if (args[0] === undefined) {
       // General help
-      messageText += "**" + client.user.username + " Commands**\n";
+      messageText += "**" + client.user?.username + " Commands**\n";
       messageText +=
         "(Use `" +
         client.prefix +
@@ -92,7 +92,7 @@ export class HelpCommand extends Command {
             client.prefix +
             command.fullName() +
             " " +
-            command.usage.toString() +
+            command.arguments.toString() +
             "`";
         }
         // Examples
@@ -126,7 +126,7 @@ export class HelpCommand extends Command {
           msg.say("📥 | Sent you a DM with information");
         }
       } catch (error) {
-        msg.say("Unable to send you help DMs. You probably have DMs disabled");
+        msg.say("Unable to send you help DMs. You might have DMs disabled");
       }
     } else {
       msg.author.dmChannel.send(messageText);

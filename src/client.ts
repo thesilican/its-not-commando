@@ -3,8 +3,8 @@ import { ClientRegistry } from "./clientregistry";
 import { CommandMessage } from "./commandmessage";
 
 interface ClientLogger {
-  log(...message: any[]): void;
-  error(...message: any[]): void;
+  log(...message: string[]): void;
+  error(...message: string[]): void;
 }
 
 type MessageValidator = (mesage: Discord.Message, client: Client) => boolean;
@@ -16,7 +16,7 @@ export type ClientOptions = {
   validator?: MessageValidator;
   logger?: ClientLogger;
   registerDefaultCommands?: boolean;
-};
+} & Discord.ClientOptions;
 
 export class Client extends Discord.Client {
   public readonly owner: string;
@@ -26,7 +26,7 @@ export class Client extends Discord.Client {
   public readonly logger: ClientLogger;
 
   constructor(options: ClientOptions) {
-    super();
+    super(options);
 
     this.owner = options.owner;
     this.token = options.token;
@@ -46,11 +46,16 @@ export class Client extends Discord.Client {
 
   public async start() {
     await this.login();
+    if (!this.user) {
+      this.logger.error("Unable to log in as user");
+      this.stop();
+      return;
+    }
     this.user.setActivity("Use " + this.prefix + "help");
 
     // Throw an error if the user doesn't exist
     try {
-      await this.fetchUser(this.owner);
+      await this.users.fetch(this.owner);
     } catch {
       this.logger.error(
         "Owner with Discord user id of '" + this.owner + "' is invalid."
@@ -61,12 +66,12 @@ export class Client extends Discord.Client {
 
   public async stop() {
     this.logger.log("Shutting down bot...");
-    await this.destroy();
-    setTimeout(process.exit, 1000, 0);
+    this.destroy();
+    setTimeout(process.exit, 10000, 0);
   }
 
   private onReady() {
-    this.logger.log("Logged in as " + this.user.tag);
+    this.logger.log("Logged in as " + this.user?.tag);
   }
 
   private onMessage(message: Discord.Message) {
@@ -109,7 +114,7 @@ export class Client extends Discord.Client {
       error.message +
       "\n" +
       error.stack;
-    this.users.get(this.owner)!.sendMessage(errorMessage);
+    this.users.resolve(this.owner)?.send(errorMessage);
     this.logger.error(errorMessage);
   }
 }

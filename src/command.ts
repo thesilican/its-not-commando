@@ -1,7 +1,7 @@
-import { CommandBase, CommandBaseOptions } from "./commandbase";
-import { Client } from "./client";
-import { CommandMessage } from "./commandmessage";
 import { DMChannel } from "discord.js";
+import { Client } from "./client";
+import { CommandBase, CommandBaseOptions } from "./commandbase";
+import { CommandMessage } from "./commandmessage";
 
 export type CommandOptions = CommandBaseOptions & {
   group?: string;
@@ -20,7 +20,7 @@ export abstract class Command extends CommandBase {
     super(options);
     this.group = options.group ?? "default";
     this.ownerOnly = options.ownerOnly ?? false;
-    this.dmAllowed = options.dmAllowed ?? false;
+    this.dmAllowed = options.dmAllowed ?? true;
     this.hidden = options.hidden ?? false;
   }
 

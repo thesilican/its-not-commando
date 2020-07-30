@@ -1,9 +1,8 @@
 import { Command } from "./command";
 import { CommandGroup, CommandGroupOptions } from "./commandgroup";
-import { PingCommand } from "./defaults/commands/pingcommand";
 import { HelpCommand } from "./defaults/commands/helpcommand";
+import { PingCommand } from "./defaults/commands/pingcommand";
 import { ShutdownCommand } from "./defaults/commands/shutdowncommand";
-import { CommandBase } from "./commandbase";
 import { SubCommand } from "./subcommand";
 
 type CommandClass = { new (): Command };
@@ -64,17 +63,21 @@ export class ClientRegistry {
     let command = new commandClass();
     for (const c of this.commands) {
       if (c.name === command.name) {
-        throw "Command with name '" + command.name + "' already exists";
+        throw new Error(
+          "Command with name '" + command.name + "' already exists"
+        );
       }
       if (command.aliases.includes(c.name)) {
-        throw "Command with alias " + command.name + "' already exists";
+        throw new Error(
+          "Command with alias " + command.name + "' already exists"
+        );
       }
       if (this.getGroup(command.group) === null) {
-        throw (
+        throw new Error(
           "No command group '" +
-          command.group +
-          "' found for command " +
-          command.name
+            command.group +
+            "' found for command " +
+            command.name
         );
       }
     }

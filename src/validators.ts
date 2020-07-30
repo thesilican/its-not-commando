@@ -1,5 +1,3 @@
-import { GuildChannel, TextChannel, Client } from "discord.js";
-
 export type ArgumentValidator = (argument: string) => string | null;
 
 export const Validator = {
@@ -60,6 +58,15 @@ export const Validator = {
   },
   User: function (value: string): string | null {
     const pattern = /^<@!?[0-9]+>$/;
+    const number = /[0-9]+/;
+    let res = value.match(pattern);
+    if (res === null) {
+      return null;
+    }
+    return value.match(number)![0];
+  },
+  Role: function (value: string): string | null {
+    const pattern = /^<@&[0-9]+>$/;
     const number = /[0-9]+/;
     let res = value.match(pattern);
     if (res === null) {

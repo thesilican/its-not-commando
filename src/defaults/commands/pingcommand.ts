@@ -1,6 +1,5 @@
-import { Command } from "../../command";
 import Discord from "discord.js";
-import { Client } from "../../client";
+import { Command } from "../../command";
 
 export class PingCommand extends Command {
   private static readonly PONG_REPLIES = [
@@ -16,7 +15,6 @@ export class PingCommand extends Command {
       group: "util",
       description: "Check if the bot is alive",
       details: "Ping the bot to check if the bot is still alive",
-      dmAllowed: true,
     });
   }
 

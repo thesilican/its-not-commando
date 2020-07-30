@@ -25,23 +25,23 @@ know the basics of discord.js. If not, first try [creating a simple discord.js b
 
 This project works best with **[Typescript][typescript]**, a typed super-set of javascript. All examples will be given in Typescript. But it works just as well using javascript.
 
-**If are using typescript**, you must ensure that you have
+**If you are using typescript**, you must ensure that you have
 `"target": "es6"` (or higher) in your `tsconfig.json`. This project requires
-ES6 features.
+ES6 features, specifically ES6 classes.
 
 ## How it works
 
-`its-not-commando` works with the concepts of _commands_. Discord users can run commands by the prefix of the bot, followed by entering the name of the command. For example, the following is the built-in `help` command:
+`its-not-commando` works with the concepts of _commands_. Discord users can run commands by entering the prefix of the bot, followed by the name of the command. For example, the following is the built-in `help` command:
 ![Help Command](./img1.png)
 
-Commands can contain arguments like numbers, strings, etc. Commands can also contain sub-commands, each of which can be run just like a normal command.
+Commands can contain arguments like numbers, strings, etc. Commands can also contain sub-commands, each of which behave just like normal commands.
 
 All commands belong to a command group. (You can see the three types of commmands in the above image). Command groups can be created, or you can just use the `default` command group
 
 ## Creating a bot
 
-To get started, you should first create a `Client`. A `Client` is the running instance of your discord bot.
-`Client` actually extends [discord.js Client][discordjsclient], so you can use all the methods from a discord.js `Client`.
+To get started, you should first create an instance of the `Client` client. A `Client` is the running instance of your discord bot. The
+`Client` class actually extends [discord.js Client][discordjsclient], so you can use all the methods from a discord.js `Client`.
 
 You must initalize the client with your discord bot token, a prefix used by the bot, and your discord user ID.
 
@@ -61,7 +61,7 @@ client.start();
 
 Commands are grouped into "command groups".
 
-By default, there are two built-in command groups. The `default` command group contains all commands, where the command group is not specified. The `util` group is used by the built-in commands `Help`, `Ping`, and `Shutdown`.
+By default, there are two built-in command groups. The `default` command group contains all commands that don't specify a command group. The `util` group is used by the built-in commands `Help`, `Ping`, and `Shutdown`.
 
 Add additional command groups to the client using `client.registry.registerGroup()`. You can optionally register multiple command groups using `client.registry.registerGroups()`
 

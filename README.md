@@ -1,6 +1,6 @@
 # It's Not Commando
 
-<p align="center">
+<p align="left">
   <a href="https://www.npmjs.com/package/its-not-commando" alt="Version">
     <img src="https://img.shields.io/npm/v/its-not-commando" />
   </a>
@@ -31,12 +31,14 @@ Personally, I use this framework in all of my discord.js projects.
 - **Built-in help, shutdown, and ping commands**
 - **Fully documented™**
 
+![Bot usage](./docs/img1.png)
+
 ## Installation
 
 **Node 8.6.0 or newer is required.**  
 `npm install its-not-commando`
 
-# Getting Started
+# Usage
 
 Check out the [getting started guide][gettingstarted]
 

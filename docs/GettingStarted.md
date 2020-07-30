@@ -14,7 +14,14 @@
 
 ## Before starting...
 
-Ensure that you are using Node.js version `>=8.6.0`.
+Ensure that you are using Node.js version `>=8.6.0`. Install with:
+
+```
+$ npm install its-not-commando
+```
+
+This guide assumes you are comfortable working in javascript/typescript. This guide also assumes you
+know the basics of discord.js. If not, first try [creating a simple discord.js bot][discordjsguide] first, without `its-not-commando`.
 
 This project works best with **[Typescript][typescript]**, a typed super-set of javascript. All examples will be given in Typescript. But it works just as well using javascript.
 
@@ -36,8 +43,7 @@ All commands belong to a command group. (You can see the three types of commmand
 To get started, you should first create a `Client`. A `Client` is the running instance of your discord bot.
 `Client` actually extends [discord.js Client][discordjsclient], so you can use all the methods from a discord.js `Client`.
 
-This will initiate a bot client with the token that you include.
-You can change the bot prefix and the [ownerID](https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-).
+You must initalize the client with your discord bot token, a prefix used by the bot, and your discord user ID.
 
 ```typescript
 import { Client } from "its-not-commando";
@@ -465,3 +471,4 @@ class SurveyCommand extends Command {
 [typescript]: https://www.typescriptlang.org/
 [discordjsclient]: https://discord.js.org/?source=post_page---------------------------#/docs/main/stable/class/Client
 [discordjsmessage]: https://discord.js.org/?source=post_page---------------------------#/docs/main/stable/class/Message
+[discordjsguide]: https://discordjs.guide/

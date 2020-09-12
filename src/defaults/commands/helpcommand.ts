@@ -121,7 +121,7 @@ export class HelpCommand extends Command {
     if (dmChannel === null) {
       try {
         await msg.author.createDM();
-        msg.author.dmChannel.send(messageText);
+        msg.author.dmChannel!.send(messageText);
         if (msg.channel.type !== "dm") {
           msg.say("📥 | Sent you a DM with information");
         }
@@ -129,7 +129,7 @@ export class HelpCommand extends Command {
         msg.say("Unable to send you help DMs. You might have DMs disabled");
       }
     } else {
-      msg.author.dmChannel.send(messageText);
+      dmChannel.send(messageText);
       if (msg.channel.type !== "dm") {
         msg.say("📥 | Sent you a DM with information");
       }

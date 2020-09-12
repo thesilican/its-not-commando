@@ -1,4 +1,4 @@
-import { Client, Command, CommandMessage } from "../../";
+import { Client, Command, CommandMessage } from "../..";
 import { Validator } from "../../validators";
 
 export default class CalculatorCommand extends Command {

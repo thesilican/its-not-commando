@@ -1,4 +1,4 @@
-import { Client, Command, CommandMessage } from "../../";
+import { Client, Command, CommandMessage } from "../..";
 import { SubCommand } from "../../subcommand";
 
 export default class GitCommand extends Command {

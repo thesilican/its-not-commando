@@ -1,4 +1,4 @@
-import { Client, Command, CommandMessage } from "../../";
+import { Client, Command, CommandMessage } from "../..";
 import { count } from "console";
 
 export default class SurveyCommand extends Command {

@@ -5,10 +5,8 @@
   "main": "dist/index.js",
   "typings": "typings/index.d.ts",
   "scripts": {
-    "start": "ts-node-dev src/example/index.ts",
-    "test": "npm start",
-    "build": "rimraf typings && rimraf dist && tsc",
-    "prepare": "npm run build"
+    "test": "ts-node-dev src/test/index.ts",
+    "build": "rimraf typings && rimraf dist && tsc"
   },
   "keywords": [
     "discord",
@@ -28,13 +26,14 @@
     "typings"
   ],
   "dependencies": {
-    "@types/node": "^14.0.27",
+    "@types/node": "^14.10.1",
     "@types/ws": "^7.2.6",
-    "discord.js": "^12.2.0"
+    "discord.js": "^12.3.1"
   },
   "devDependencies": {
+    "dotenv": "^8.2.0",
     "rimraf": "^3.0.2",
-    "ts-node-dev": "^1.0.0-pre.56",
+    "ts-node-dev": "^1.0.0-pre.62",
     "typescript": "^3.9.7"
   }
 }

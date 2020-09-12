@@ -1,4 +1,4 @@
-import { Client, Command, CommandMessage } from "../../";
+import { Client, Command, CommandMessage } from "../..";
 
 export default class AboutCommand extends Command {
   constructor() {

@@ -1,15 +1,16 @@
-import { Client } from "../";
-import { token } from "./auth.json";
+import { Client } from "..";
+import dotenv from "dotenv";
 import GitCommand from "./commands/GitCommand";
 import QuizCommand from "./commands/QuizCommand";
 import SurveyCommand from "./commands/SurveyCommand";
 import CalculatorCommand from "./commands/CalculatorCommand";
 import OnionCommand from "./commands/OnionCommand";
+dotenv.config();
 
 const client = new Client({
-  owner: "294169610679484417",
-  prefix: "b.",
-  token: token,
+  owner: process.env.OWNER!,
+  prefix: process.env.PREFIX!,
+  token: process.env.TOKEN!,
 });
 
 client.registry.registerGroups([

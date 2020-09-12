@@ -4,6 +4,7 @@ export * from "./clientregistry";
 export * from "./command";
 export * from "./commandgroup";
 export * from "./commandmessage";
+export * from "./ratelimitcontroller";
 export * from "./reactionmenu";
 export * from "./subcommand";
 export * from "./usage";

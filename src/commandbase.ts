@@ -1,5 +1,6 @@
 import { Client } from "./client";
 import { CommandMessage } from "./commandmessage";
+import { RateLimitController, RateLimitOptions } from "./ratelimitcontroller";
 import { SubCommand } from "./subcommand";
 import { Usage, UsageOptions } from "./usage";
 
@@ -19,7 +20,19 @@ export type CommandBaseOptions = {
   subcommands?: SubCommandClass[];
   details?: string;
   examples?: [string, string][];
+  rateLimit?: CommandRateLimitOptions;
 };
+
+type CommandRateLimitOptions = RateLimitOptions & {
+  customMessage?: RateLimitMessage | string;
+};
+type RateLimitMessage = (seconds: number, msg: CommandMessage) => string;
+
+function defaultRatelimitMessage(seconds: number, msg: CommandMessage) {
+  const user = msg.author.username;
+  const sec = Math.ceil(seconds);
+  return `**${user}**, please cool down! (**${sec}** seconds left)`;
+}
 
 export abstract class CommandBase {
   public readonly name: string;
@@ -27,6 +40,8 @@ export abstract class CommandBase {
   public readonly aliases: string[];
   public readonly subcommands?: SubCommand[];
   public readonly helpInfo: CommandHelpInfo;
+  public readonly rateLimit?: RateLimitController;
+  public readonly rateLimitMessage?: RateLimitMessage;
 
   protected constructor(options: CommandBaseOptions) {
     this.name = options.name;
@@ -39,6 +54,16 @@ export abstract class CommandBase {
       details: options.details ?? "",
       examples: options.examples ?? [],
     };
+    if (options.rateLimit) {
+      this.rateLimit = new RateLimitController(options.rateLimit);
+      if (typeof options.rateLimit.customMessage === "string") {
+        const msg = options.rateLimit.customMessage;
+        this.rateLimitMessage = () => msg;
+      } else {
+        this.rateLimitMessage =
+          options.rateLimit.customMessage ?? defaultRatelimitMessage;
+      }
+    }
   }
 
   public execute(
@@ -46,6 +71,21 @@ export abstract class CommandBase {
     msg: CommandMessage,
     client: Client
   ): boolean {
+    // Rate limiting
+    if (this.rateLimit) {
+      const id = msg.author.id;
+      const now = new Date().getTime();
+      const res = this.rateLimit.hit(id, now);
+      if (!res) {
+        const seconds = this.rateLimit.getMsRemaining(id, now) / 1000;
+        const delMsg = msg.say(this.rateLimitMessage!(seconds, msg));
+        setTimeout(async () => {
+          delMsg.then((msg) => msg.delete());
+        }, 5000);
+        return false;
+      }
+    }
+
     let splits = commandText.split(" ");
     let args = splits.slice(1);
     if (this.subcommands) {

@@ -5,6 +5,7 @@ import QuizCommand from "./commands/QuizCommand";
 import SurveyCommand from "./commands/SurveyCommand";
 import CalculatorCommand from "./commands/CalculatorCommand";
 import OnionCommand from "./commands/OnionCommand";
+import RateLimitCommand from "./commands/RateLimitCommand";
 dotenv.config();
 
 const client = new Client({
@@ -30,6 +31,7 @@ client.registry.registerCommands([
   OnionCommand,
   QuizCommand,
   SurveyCommand,
+  RateLimitCommand,
 ]);
 
 client.start();

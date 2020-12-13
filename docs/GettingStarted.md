@@ -26,8 +26,8 @@ know the basics of discord.js. If not, first try [creating a simple discord.js b
 This project works best with **[Typescript][typescript]**, a typed super-set of javascript. All examples will be given in Typescript. But it works just as well using javascript.
 
 **If you are using typescript**, you must ensure that you have
-`"target": "es6"` (or higher) in your `tsconfig.json`. This project requires
-ES6 features, specifically ES6 classes.
+`"target": "es2017"` (or higher) in your `tsconfig.json`. This project requires
+ES6 features, specifically ES6 classes. It also requires `async` and `await`, which are available in es2017.
 
 ## How it works
 

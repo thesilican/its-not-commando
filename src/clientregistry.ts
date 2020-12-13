@@ -59,8 +59,13 @@ export class ClientRegistry {
     return null;
   }
 
-  public registerCommand(commandClass: CommandClass) {
-    let command = new commandClass();
+  public registerCommand(commandClass: Command | CommandClass) {
+    let command: Command;
+    try {
+      command = new (commandClass as CommandClass)();
+    } catch {
+      command = commandClass as Command;
+    }
     for (const c of this.commands) {
       if (c.name === command.name) {
         throw new Error(
@@ -85,7 +90,7 @@ export class ClientRegistry {
     return this;
   }
 
-  public registerCommands(commands: CommandClass[]) {
+  public registerCommands(commands: (Command | CommandClass)[]) {
     for (const command of commands) {
       this.registerCommand(command);
     }

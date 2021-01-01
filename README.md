@@ -35,7 +35,7 @@ Personally, I use this framework in all of my discord.js projects.
 
 ## Installation
 
-**Node 8.6.0 or newer is required.**  
+**Node 14 or newer is required.**  
 `npm install its-not-commando`
 
 # Usage

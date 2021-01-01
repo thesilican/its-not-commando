@@ -169,20 +169,20 @@ By default, the `Help`, `Ping`, and `Shutdown` commands are already included.
 
 Here are the options available when constructing a command:
 
-| Command Option       | Description                                                                                          | Example                                                                           |
-| -------------------- | ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| name                 | The name used to execute the command                                                                 | `npm`                                                                             |
-| description          | A brief description of the command, shown to the user in the `help` command                          | `"Manages your packages"`                                                         |
-| aliases              | An array of command aliases, which can be substituted for the actual command                         | `["n", "nodepackagemanager"]`                                                     |
-| arguments            | An array of command line arguments                                                                   | (See [command arguments](#command-arguments))                                     |
-| subcommands          | An array of subcommand classes. If subcommands are provided, command arguments are ignored           | `[InstallCommand, UpdateCommand]`                                                 |
-| details              | A more extensive description of the command, shown to the user when running `help command`           | `"This command manages your node packages [...]"`                                 |
-| examples             | An array of example command usages (tuple of command usage and explanation)                          | `[["npm install", "installs packages"], ["npm update", "updates your packages"]]` |
-| rate limit           | Options for rate limiting. `max` command usages can be used within a window of `seconds` seconds     | `{max: 10, seconds: 60}`                                                          |
-| group (Command only) | The name of the command group that this command belongs to. Default group is "default"               | `"fun"`                                                                           |
-| ownerOnly            | Whether this command is only allowed by the bot owner. Default is false                              | `true`                                                                            |
-| dmAllowed            | Whether or not this command is allowed in DMs. Default is true                                       | `false`                                                                           |
-| hidden               | Whether or not this command is hidden from listing when running the `help` command. Default is false | `true`                                                                            |
+| Command Option | Description                                                                                          | Example                                                                           |
+| -------------- | ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| name           | The name used to execute the command                                                                 | `"npm"`                                                                           |
+| description    | A brief description of the command, shown to the user in the `help` command                          | `"Manages your packages"`                                                         |
+| aliases        | An array of command aliases, which can be substituted for the actual command                         | `["n", "nodepackagemanager"]`                                                     |
+| arguments      | An array of command arguments                                                                        | (See [command arguments](#command-arguments))                                     |
+| subcommands    | An array of subcommand classes. If subcommands are provided, command arguments are ignored           | `[InstallCommand, UpdateCommand]`                                                 |
+| details        | A more extensive description of the command, shown to the user when running `help command`           | `"This command manages your node packages [...]"`                                 |
+| examples       | An array of example command usages (tuple of command usage and explanation)                          | `[["npm install", "installs packages"], ["npm update", "updates your packages"]]` |
+| rateLimit      | Options for rate limiting. `max` command usages can be used within a window of `seconds` seconds     | `{max: 10, seconds: 60}`                                                          |
+| group          | The name of the command group that this command belongs to. Default group is "default"               | `"fun"`                                                                           |
+| ownerOnly      | Whether this command is only allowed by the bot owner. Default is false                              | `true`                                                                            |
+| dmAllowed      | Whether or not this command is allowed in DMs. Default is true                                       | `false`                                                                           |
+| hidden         | Whether or not this command is hidden from listing when running the `help` command. Default is false | `true`                                                                            |
 
 ## Command Arguments
 
@@ -276,9 +276,9 @@ All Argument Options:
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | name | The name of the argument |
 | validator | An optional validator. See below for validator types. Defaults to `Validator.String` |
-| optional | Whether or not the argument is optional. Defaults to true. |
-| defaultValue | The default value of the argument. Only used if optional is true. |
-| multi | If multi is true, this argument will combine the rest of the arguments into one big string. Can only be set for the last argument.v Defaults to false. |
+| optional | Whether or not the argument is optional. Defaults to false |
+| defaultValue | The default value of the argument. Only used if optional is true |
+| multi | If multi is true, this argument will combine any remaining arguments into one big string. Can only be set for the last argument. Defaults to false |
 
 ### Argument Validators
 
@@ -296,6 +296,8 @@ You can use the following validators to validate your arguments. Invalid argumen
 | User                   | Extracts the user ID portion of the discord @mention, or invalid if not proper mention format                    | "<@1234567890>" => "123456789", "Kevin" => invalid              |
 | Role                   | Extracts the role ID portion of the discord @role, or invalid if not proper mention format                       | "<@&1234567890>" => "123456789", "Moderator" => invalid         |
 | Channel                | Extracts the channel ID portion of the discord #channel, or invalid if not proper mention format                 | "<#1234567890>" => "123456789", "Moderator" => invalid          |
+
+You can also write your own custom validator if you so wish. Command validators have the following call signature: `(argument: string) => string | null`, returning string if the argument is valid, or null if the argument is invalid.
 
 ## Subcommands
 

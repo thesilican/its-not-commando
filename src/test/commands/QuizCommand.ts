@@ -3,7 +3,7 @@ import { Client, Command, CommandMessage } from "../..";
 const quizQuestions = [
   {
     question: "What is the capital of Canada?",
-    answer: "Toronto",
+    answer: "Ottawa",
   },
   {
     question: "What is 17 times 6?",

@@ -27,7 +27,7 @@ class InnerLayerCommand extends SubCommand {
     super({
       name: "layer",
       description: "Second layer",
-      subcommands: [CoreCommand],
+      subcommands: [new CoreCommand()],
     });
   }
 }

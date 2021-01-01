@@ -6,6 +6,7 @@ import SurveyCommand from "./commands/SurveyCommand";
 import CalculatorCommand from "./commands/CalculatorCommand";
 import OnionCommand from "./commands/OnionCommand";
 import RateLimitCommand from "./commands/RateLimitCommand";
+import EmbedCommand from "./commands/EmbedCommand";
 dotenv.config();
 
 const client = new Client({
@@ -25,13 +26,15 @@ client.registry.registerGroups([
   },
 ]);
 
+// Commands can be created with class name or class instance
 client.registry.registerCommands([
   CalculatorCommand,
   GitCommand,
   OnionCommand,
   QuizCommand,
-  SurveyCommand,
-  RateLimitCommand,
+  new SurveyCommand(),
+  new RateLimitCommand(),
+  new EmbedCommand(),
 ]);
 
 client.start();

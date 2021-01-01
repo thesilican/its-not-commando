@@ -1,11 +1,12 @@
 import {
+  APIMessage,
+  DMChannel,
   Message,
   MessageAdditions,
   MessageOptions,
-  DMChannel,
+  StringResolvable,
 } from "discord.js";
 import { ReactionMenu, ReactionMenuOptions } from "./reactionmenu";
-import { Command } from "./command";
 
 type PromptOptions = {
   seconds?: number;
@@ -25,9 +26,13 @@ export class CommandMessage extends Message {
   }
 
   async say(
-    content: string,
+    options: MessageOptions | MessageAdditions | APIMessage
+  ): Promise<CommandMessage>;
+  async say(
+    content: StringResolvable,
     options?: MessageOptions | MessageAdditions
-  ): Promise<CommandMessage> {
+  ): Promise<CommandMessage>;
+  async say(content: any, options?: any): Promise<CommandMessage> {
     let messages = await this.channel.send(content, options);
     let res: CommandMessage | CommandMessage[];
     if (Array.isArray(messages)) {

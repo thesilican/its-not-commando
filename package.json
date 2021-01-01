@@ -6,7 +6,8 @@
   "typings": "typings/index.d.ts",
   "scripts": {
     "test": "ts-node-dev src/test/index.ts",
-    "build": "rimraf typings && rimraf dist && tsc"
+    "build": "rimraf typings && rimraf dist && tsc",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "discord",
@@ -27,14 +28,17 @@
     "!typings/test"
   ],
   "dependencies": {
-    "@types/node": "^14.10.1",
-    "@types/ws": "^7.2.6",
-    "discord.js": "^12.3.1"
+    "@types/node": "^14.14.18",
+    "@types/ws": "^7.4.0"
+  },
+  "peerDependencies": {
+    "discord.js": "12.x"
   },
   "devDependencies": {
+    "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
     "rimraf": "^3.0.2",
-    "ts-node-dev": "^1.0.0-pre.62",
+    "ts-node-dev": "^1.1.1",
     "typescript": "^3.9.7"
   }
 }

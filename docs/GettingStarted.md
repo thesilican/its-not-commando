@@ -43,7 +43,7 @@ All commands belong to a command group. (You can see the three types of commmand
 To get started, you should first create an instance of the `Client` client. A `Client` is the running instance of your discord bot. The
 `Client` class actually extends [discord.js Client][discordjsclient], so you can use all the methods from a discord.js `Client`.
 
-You must initalize the client with your discord bot token, a prefix used by the bot, and your discord user ID.
+You must initialize the client with your discord bot token, a prefix used by the bot, and your discord user ID.
 
 ```typescript
 import { Client } from "its-not-commando";
@@ -161,11 +161,28 @@ You can then run your command in discord by typing
 
 By default, the `Help`, `Ping`, and `Shutdown` commands are already included.
 
+Here are the options available when constructing a command:
+
+| Command Option       | Description                                                                                          | Example                                                                           |
+| -------------------- | ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| name                 | The name used to execute the command                                                                 | `npm`                                                                             |
+| description          | A brief description of the command, shown to the user in the `help` command                          | `"Manages your packages"`                                                         |
+| aliases              | An array of command aliases, which can be substituted for the actual command                         | `["n", "nodepackagemanager"]`                                                     |
+| arguments            | An array of command line arguments                                                                   | (See [command arguments](#command-arguments))                                     |
+| subcommands          | An array of subcommand classes. If subcommands are provided, command arguments are ignored           | `[InstallCommand, UpdateCommand]`                                                 |
+| details              | A more extensive description of the command, shown to the user when running `help command`           | `"This command manages your node packages [...]"`                                 |
+| examples             | An array of example command usages (tuple of command usage and explanation)                          | `[["npm install", "installs packages"], ["npm update", "updates your packages"]]` |
+| rate limit           | Options for rate limiting. `max` command usages can be used within a window of `seconds` seconds     | `{max: 10, seconds: 60}`                                                          |
+| group (Command only) | The name of the command group that this command belongs to. Default group is "default"               | `"fun"`                                                                           |
+| ownerOnly            | Whether this command is only allowed by the bot owner. Default is false                              | `true`                                                                            |
+| dmAllowed            | Whether or not this command is allowed in DMs. Default is true                                       | `false`                                                                           |
+| hidden               | Whether or not this command is hidden from listing when running the `help` command. Default is false | `true`                                                                            |
+
 ## Command Arguments
 
-Command arguments are an array of strings passed to the Command. They are accessable via the `args[]` parameter of `Command.run()`
+Command arguments are an array of strings passed to the Command, similar to command arguments in command-line applications. They are accessible via the `args[]` parameter of `Command.run()`
 
-For example, in the command `"b.math 1 plus 2"`, the arguments would be `"1"`, `"plus"`, and `"1"`
+For example, in the command `"+math 1 plus 2"`, the arguments would be `"1"`, `"plus"`, and `"1"`
 
 You can add command arguments to your commands with the `arguments` option. You can add validators to arguments using [Validators](#argument-validators)
 
@@ -292,7 +309,7 @@ class GitCommand extends Command {
       aliases: [],
       group: "util",
       description: "Commands related to git",
-      subCommands: [GitAddSubCommand, GitCommitSubCommand],
+      subcommands: [GitAddSubCommand, GitCommitSubCommand],
     });
   }
 
@@ -399,7 +416,7 @@ class ExampleCommand extends Command {
   }
 
   async run(msg: CommandMessage, args: string[], client: Client) {
-    // Amother very simple way to get user input
+    // Another very simple way to get user input
     const reaction = await msg.promptReaction("How do you feel today?", [
       "😊",
       "😢",

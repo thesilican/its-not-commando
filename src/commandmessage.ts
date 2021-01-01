@@ -3,6 +3,7 @@ import {
   MessageAdditions,
   MessageOptions,
   DMChannel,
+  MessageEmbed,
 } from "discord.js";
 import { ReactionMenu, ReactionMenuOptions } from "./reactionmenu";
 import { Command } from "./command";
@@ -25,7 +26,7 @@ export class CommandMessage extends Message {
   }
 
   async say(
-    content: string,
+    content: string | MessageEmbed,
     options?: MessageOptions | MessageAdditions
   ): Promise<CommandMessage> {
     let messages = await this.channel.send(content, options);

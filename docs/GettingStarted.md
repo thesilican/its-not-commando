@@ -14,10 +14,16 @@
 
 ## Before starting...
 
-Ensure that you are using Node.js version `>=8.6.0`. Install with:
+Ensure that you are using Node.js version `>=14`. Install with:
 
 ```
 $ npm install its-not-commando
+```
+
+You will also have to install `discord.js` version 12 as a peer dependency. Install with:
+
+```
+$ npm install discord.js@12
 ```
 
 This guide assumes you are comfortable working in javascript/typescript. This guide also assumes you

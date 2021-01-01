@@ -17,7 +17,7 @@ export type CommandBaseOptions = {
   description: string;
   aliases?: string[];
   arguments?: UsageOptions;
-  subcommands?: SubCommandClass[];
+  subcommands?: (SubCommand | SubCommandClass)[];
   details?: string;
   examples?: [string, string][];
   rateLimit?: CommandRateLimitOptions;
@@ -47,7 +47,13 @@ export abstract class CommandBase {
     this.name = options.name;
     this.arguments = new Usage(options.arguments ?? []);
     this.subcommands =
-      options.subcommands?.map((s) => new s().setParent(this)) ?? undefined;
+      options.subcommands?.map((sub) => {
+        try {
+          return new (sub as SubCommandClass)().setParent(this);
+        } catch {
+          return sub as SubCommand;
+        }
+      }) ?? undefined;
     this.aliases = options.aliases ?? [];
     this.helpInfo = {
       description: options.description,

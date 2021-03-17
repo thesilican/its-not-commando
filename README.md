@@ -12,6 +12,10 @@
   </a>
 </p>
 
+## **Notice:** I don't really play on updating this library any further, it will not be updated for discord.js versions beyond v12 - I suggest you find another discord command framework to use.
+
+<hr/>
+
 `its-not-commando` is a simple discord.js command framework that is feature-light and
 simple to use. In terms of design, it's pretty similar to [discord.js-commando][commando].
 

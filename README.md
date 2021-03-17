@@ -12,7 +12,7 @@
   </a>
 </p>
 
-## **Notice:** I don't really play on updating this library any further, it will not be updated for discord.js versions beyond v12 - I suggest you find another discord command framework to use.
+## **Notice:** I don't really plan on updating this library any further, it will not be updated for discord.js versions beyond v12 - I suggest you find another discord command framework to use.
 
 <hr/>
 

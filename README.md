@@ -1,17 +1,5 @@
 # It's Not Commando
 
-<p align="left">
-  <a href="https://www.npmjs.com/package/its-not-commando" alt="Version">
-    <img src="https://img.shields.io/npm/v/its-not-commando" />
-  </a>
-  <a href="https://www.npmjs.com/package/its-not-commando" alt="Version">
-    <img src="https://img.shields.io/npm/dy/its-not-commando" />
-  </a>
-  <a href="https://github.com/thesilican/its-not-commando" alt="Version">
-    <img src="https://img.shields.io/requires/github/thesilican/its-not-commando" />
-  </a>
-</p>
-
 ## **Notice:** I don't really plan on updating this library any further, it will not be updated for discord.js versions beyond v12 - I suggest you find another discord command framework to use.
 
 <hr/>
